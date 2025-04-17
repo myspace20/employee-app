@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="1003.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.employee.employee_app.DashboardController">
+   <children>
+      <TableView fx:id="tableView" layoutX="60.0" layoutY="234.0" prefHeight="302.0" prefWidth="887.0">
+        <columns>
+          <TableColumn fx:id="empIdColumn" prefWidth="95.19998168945312" text="EmployeeId" />
+          <TableColumn fx:id="nameColumn" prefWidth="130.40003967285156" text="Name" />
+            <TableColumn fx:id="departmentColumn" prefWidth="130.40003967285156" text="Department" />
+            <TableColumn fx:id="salaryColumn" prefWidth="106.79995727539062" text="Salary" />
+            <TableColumn fx:id="ratingColumn" prefWidth="139.20001220703125" text="Performance Rating" />
+            <TableColumn fx:id="years_xpColumn" prefWidth="139.20001220703125" text="Years of Experience" />
+            <TableColumn fx:id="activeColumn" prefWidth="139.20001220703125" text="isActive" />
+            <TableColumn fx:id="actionColumn" prefWidth="200.0" text="Action" />
+        </columns>
+      </TableView>
+      <ChoiceBox fx:id="filter" layoutX="60.0" layoutY="47.0" onAction="#onSortingCriteria" prefHeight="26.0" prefWidth="78.0" />
+      <TextField fx:id="nameDepartmentSearch" layoutX="178.0" layoutY="47.0" prefHeight="26.0" prefWidth="182.0" promptText="Search employee by name or department" />
+      <Button fx:id="addEmployee" layoutX="836.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#showAddEmployeeDialog" prefHeight="26.0" prefWidth="123.0" text="Add employee" />
+      <Button layoutX="378.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#onSearchByName" prefHeight="26.0" prefWidth="123.0" text="Retrieve by name" />
+      <Button layoutX="516.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#onSearchByDepartment" prefHeight="26.0" prefWidth="150.0" text="Retrieve by department" />
+      <TextField fx:id="ratingAmount" layoutX="56.0" layoutY="124.0" prefHeight="26.0" prefWidth="72.0" promptText="Rating" />
+      <Button layoutX="269.0" layoutY="124.0" mnemonicParsing="false" onMouseClicked="#onSalaryRaise" prefHeight="26.0" prefWidth="85.0" text="Apply" />
+      <Button layoutX="219.0" layoutY="189.0" mnemonicParsing="false" onMouseClicked="#onCalculateDepAverageSalary" prefHeight="26.0" prefWidth="150.0" text="Calculate average salary" />
+      <TextField fx:id="departmentName" layoutX="60.0" layoutY="189.0" prefHeight="26.0" prefWidth="137.0" promptText="Enter the department name" />
+      <TextField fx:id="ratingGet" layoutX="404.0" layoutY="189.0" prefHeight="26.0" prefWidth="78.0" promptText="Rating" />
+      <Button layoutX="516.0" layoutY="189.0" mnemonicParsing="false" onMouseClicked="#onGetEmployeesByRating" prefHeight="26.0" prefWidth="150.0" text="Retrieve by rating" />
+      <TextField fx:id="percentageValue" layoutX="153.0" layoutY="124.0" prefHeight="26.0" prefWidth="94.0" promptText="Percentage" />
+      <TextField fx:id="minSalary" layoutX="404.0" layoutY="124.0" prefHeight="26.0" prefWidth="78.0" promptText="Min. Salary" />
+      <TextField fx:id="maxSalary" layoutX="513.0" layoutY="124.0" prefHeight="26.0" prefWidth="78.0" promptText="Max. Salary" />
+      <Button fx:id="filterBySalaryRange" layoutX="615.0" layoutY="124.0" mnemonicParsing="false" onMouseClicked="#onGetBySalaryRange" prefHeight="26.0" prefWidth="78.0" text="Apply" />
+      <Label fx:id="depAverage" layoutX="768.0" layoutY="128.0" prefHeight="18.0" prefWidth="190.0" text="The average for the department is" />
+      <Label fx:id="deptAverage" layoutX="768.0" layoutY="155.0" prefHeight="33.0" prefWidth="72.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="57.0" layoutY="102.0" prefHeight="18.0" prefWidth="255.0" text="Apply Salary raise by rating and percentage">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="60.0" layoutY="163.0" prefHeight="18.0" prefWidth="295.0" text="Calculate the average salary for a department">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="404.0" layoutY="163.0" prefHeight="18.0" prefWidth="295.0" text="Retrieve employees by rating">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="404.0" layoutY="102.0" prefHeight="18.0" prefWidth="295.0" text="Retrieve employees between salary ranges">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="178.0" layoutY="28.0" prefHeight="18.0" prefWidth="399.0" text="Retrieve employees by name or department">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="59.0" layoutY="28.0" prefHeight="18.0" prefWidth="78.0" text="Sort by">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
