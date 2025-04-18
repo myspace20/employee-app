@@ -380,7 +380,7 @@ public class DashboardController {
                     if (!newName.equals(originalName)) {
                         employee.setName(newName);
                         try {
-                            employeeDB.updateEmployeeDetails(employee.getId(), "name", newName);
+                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "name", newName);
                         } catch (Exception e) {
                             showAlert("Invalid update data", e.getMessage());
                         }
@@ -388,7 +388,7 @@ public class DashboardController {
                     if (!newDepartment.equals(originalDepartment)) {
                         employee.setDepartment(newDepartment);
                         try {
-                            employeeDB.updateEmployeeDetails(employee.getId(), "department", newDepartment);
+                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "department", newDepartment);
                         } catch (Exception e) {
                             showAlert("Invalid update data", e.getMessage());
                         }
@@ -396,7 +396,7 @@ public class DashboardController {
                     if (newSalary != originalSalary) {
                         employee.setSalary(newSalary);
                         try {
-                            employeeDB.updateEmployeeDetails(employee.getId(), "salary", newSalary);
+                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "salary", newSalary);
                         } catch (Exception e) {
                             showAlert("Invalid update data", e.getMessage());
                         }
@@ -404,7 +404,7 @@ public class DashboardController {
                     if (newPerformanceRating != originalPerformanceRating) {
                         employee.setPerformanceRating(newPerformanceRating);
                         try {
-                            employeeDB.updateEmployeeDetails(employee.getId(), "performance", newPerformanceRating);
+                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "performance", newPerformanceRating);
                         } catch (Exception e) {
                             showAlert("Invalid update data", e.getMessage());
                         }
@@ -412,7 +412,7 @@ public class DashboardController {
                     if (newYearsOfExperience != originalYearsOfExperience) {
                         employee.setYearsOfExperience(newYearsOfExperience);
                         try {
-                            employeeDB.updateEmployeeDetails(employee.getId(), "experience", newYearsOfExperience);
+                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "experience", newYearsOfExperience);
                         } catch (Exception e) {
                             showAlert("Invalid update data", e.getMessage());
                         }
@@ -420,7 +420,7 @@ public class DashboardController {
                     if (newIsActive != originalIsActive) {
                         employee.setActive(newIsActive);
                         try {
-                            employeeDB.updateEmployeeDetails(employee.getId(), "active", newIsActive);
+                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "active", newIsActive);
                         } catch (Exception e) {
                             showAlert("Invalid update data", e.getMessage());
                         }
@@ -434,8 +434,6 @@ public class DashboardController {
             loadEmployees();
 
     }
-
-
 
 
     private void showDeleteConfirmation(Employee<EmployeeID> employee) {

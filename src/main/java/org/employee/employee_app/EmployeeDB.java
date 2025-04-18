@@ -1,6 +1,7 @@
 package org.employee.employee_app;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeDB<T, E> {
 
@@ -157,7 +158,7 @@ public class EmployeeDB<T, E> {
 
         employeeDB.values().stream()
                 .map(e -> String.format("%-10s %-20s %-15s %-10.2f %-18.1f %-10d %-10s",
-                        e.getId(), e.getName(), e.getDepartment(), e.getSalary(),
+                        e.getEmployeeId(), e.getName(), e.getDepartment(), e.getSalary(),
                         e.getPerformanceRating(), e.getYearsOfExperience(), e.isActive()))
                 .forEach(System.out::println);
     }
@@ -169,8 +170,30 @@ public class EmployeeDB<T, E> {
 
         for (Employee<T> e : employeeDB.values()) {
             System.out.printf("%-10s %-20s %-15s %-10.2f %-18.1f %-10d %-10s%n",
-                    e.getId(), e.getName(), e.getDepartment(), e.getSalary(),
+                    e.getEmployeeId(), e.getName(), e.getDepartment(), e.getSalary(),
                     e.getPerformanceRating(), e.getYearsOfExperience(), e.isActive());
+        }
+    }
+
+
+    public  void displayDepartmentSalaryAnalytics() {
+        System.out.println("DEPARTMENT-BASED SALARY ANALYTICS");
+        System.out.println("--------------------------------------------------------------------------");
+
+        Map<String, List<Employee>> grouped = employeeDB.values().stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment));
+
+        for (Map.Entry<String, List<Employee>> entry : grouped.entrySet()) {
+            String dept = entry.getKey();
+            List<Employee> employees = entry.getValue();
+
+            double totalSalary = employees.stream().mapToDouble(Employee::getSalary).sum();
+            double avgSalary = employees.stream().mapToDouble(Employee::getSalary).average().orElse(0);
+            double maxSalary = employees.stream().mapToDouble(Employee::getSalary).max().orElse(0);
+            double minSalary = employees.stream().mapToDouble(Employee::getSalary).min().orElse(0);
+
+            System.out.printf(" %-15s | Total: $%-10.2f | Avg: $%-10.2f | Max: $%-10.2f | Min: $%-10.2f%n",
+                    dept, totalSalary, avgSalary, maxSalary, minSalary);
         }
     }
 

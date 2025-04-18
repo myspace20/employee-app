@@ -6,7 +6,7 @@ public class Employee<T> implements Comparable<Employee<T>>{
 
     T employeeId;
     String name;
-    String department;
+    static String department;
     double salary;
     double performanceRating;
     int yearsOfExperience;
@@ -79,9 +79,6 @@ public class Employee<T> implements Comparable<Employee<T>>{
         salary = newSalary;
     }
 
-    public EmployeeID getId() {
-        return (EmployeeID) employeeId;
-    }
 
     public int  getYearsOfExperience() {
         return yearsOfExperience;
