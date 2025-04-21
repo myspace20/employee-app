@@ -1,11 +1,14 @@
-package org.employee.employee_app;
+package org.employee.employee_app.models;
+
+import org.employee.employee_app.exceptions.FailedUpdateOperation;
+import org.employee.employee_app.exceptions.InvalidUserInput;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class EmployeeDB<T, E> {
 
-    private final Map<T,Employee<T>> employeeDB = new HashMap<>();
+    private final Map<T, Employee<T>> employeeDB = new HashMap<>();
 
     public void addEmployee(Employee<T> e){
         employeeDB.put(e.employeeId, e);
@@ -22,25 +25,15 @@ public class EmployeeDB<T, E> {
     }
 
     public void updateEmployeeDetails(T employeeId, String field, Object newValue) throws Exception {
-        if (employeeId == null){
-            throw new IllegalArgumentException("Employee Id is required");
-        }
-        if (field == null || field.isEmpty()){
-            throw new IllegalArgumentException("Employee field is required");
-        }
-        if(newValue == null){
-            throw new IllegalArgumentException("Employee update value must not be null");
-        }
         Employee<T> currentEmployee = employeeDB.get(employeeId);
         if (currentEmployee == null) {
-            throw new Exception("Employee does not exist");
+            throw new FailedUpdateOperation("Employee does not exist");
         }
-
         Employee<T> updatedEmployee = getTEmployee(field, newValue, currentEmployee);
 
         boolean replaced = employeeDB.replace(employeeId, currentEmployee, updatedEmployee);
         if (!replaced) {
-            throw new Exception("Employee update failed");
+            throw new FailedUpdateOperation("Employee update failed");
         }
     }
 
@@ -63,7 +56,7 @@ public class EmployeeDB<T, E> {
             case "experience" -> updatedEmployee.setYearsOfExperience((Integer) newValue);
             case "active" -> updatedEmployee.setActive((Boolean) newValue);
             default -> {
-                throw new IllegalArgumentException("Invalid employee data field");
+                throw new InvalidUserInput("Invalid employee data field");
             }
         }
         return updatedEmployee;
@@ -71,18 +64,12 @@ public class EmployeeDB<T, E> {
 
 
     public List<Employee<T>> getEmployeesByDepartment(String department){
-        if(department == null || department.isEmpty()){
-            throw new IllegalArgumentException("Invalid input: Department must not be null");
-        }
        return employeeDB.values().stream()
                 .filter(emp -> emp.getDepartment().equals(department))
                 .toList();
     }
 
     public List<Employee<T>> getEmployeesByName(String name){
-        if(name == null || name.isEmpty()){
-            throw new IllegalArgumentException("Invalid input: Name must not be null");
-        }
         return employeeDB.values().stream()
                 .filter(emp -> emp.getName().equals(name))
                 .toList();
@@ -90,33 +77,18 @@ public class EmployeeDB<T, E> {
 
 
     public List<Employee<T>> getEmployeesInSalaryRange(double min, double max){
-        if(max <= 0){
-            throw new IllegalArgumentException("Maximum must greater than 0");
-        }
-        if(min <= 0 ){
-            throw new IllegalArgumentException("Minimum must greater than 0");
-        }
         return employeeDB.values().stream()
                 .filter(emp ->emp.getSalary() >= min && emp.getSalary() <= max)
                 .toList();
     }
 
     public List<Employee<T>> getEmployeesByRating(double rating){
-        if(rating <= 0){
-            throw new IllegalArgumentException("Rating value must greater than 0");
-        }
         return employeeDB.values().stream()
                 .filter(emp ->emp.getPerformanceRating() >=rating).toList();
     }
 
 
     public void salaryRaiseByRatePercent(double rating, double percent){
-        if(rating <= 0){
-            throw new IllegalArgumentException("Range values must greater than 0");
-        }
-        if(percent <= 0){
-            throw new IllegalArgumentException("Range values must greater than 0");
-        }
         employeeDB.values().stream()
                 .filter(e -> e.getPerformanceRating() >= rating)
                 .forEach(e -> e.setSalary(e.getSalary() * (1 + percent / 100.0)));
@@ -141,9 +113,6 @@ public class EmployeeDB<T, E> {
 
 
     public double getAverageSalaryByDepartment(String department) {
-        if(department == null || department.isEmpty()){
-            throw new IllegalArgumentException("Invalid input: Department name must not be null");
-        }
         return employeeDB.values().stream()
                 .filter(e -> e.getDepartment().equalsIgnoreCase(department))
                 .mapToDouble(Employee::getSalary)

@@ -1,4 +1,4 @@
-package org.employee.employee_app;
+package org.employee.employee_app.models;
 
 import java.util.Comparator;
 
@@ -6,11 +6,12 @@ public class Employee<T> implements Comparable<Employee<T>>{
 
     T employeeId;
     String name;
-    static String department;
+    String department;
     double salary;
     double performanceRating;
     int yearsOfExperience;
     boolean isActive;
+
 
     public Employee(T employeeId, String name, String department, double salary, double performanceRating, int yearsOfExperience, boolean isActive){
         this.employeeId = employeeId;

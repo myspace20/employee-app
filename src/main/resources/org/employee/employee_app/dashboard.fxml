@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="1003.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.employee.employee_app.DashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="588.0" prefWidth="1003.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.employee.employee_app.controllers.DashboardController">
    <children>
       <TableView fx:id="tableView" layoutX="60.0" layoutY="234.0" prefHeight="302.0" prefWidth="887.0">
         <columns>
@@ -20,7 +20,7 @@
       </TableView>
       <ChoiceBox fx:id="filter" layoutX="60.0" layoutY="47.0" onAction="#onSortingCriteria" prefHeight="26.0" prefWidth="78.0" />
       <TextField fx:id="nameDepartmentSearch" layoutX="178.0" layoutY="47.0" prefHeight="26.0" prefWidth="182.0" promptText="Search employee by name or department" />
-      <Button fx:id="addEmployee" layoutX="836.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#showAddEmployeeDialog" prefHeight="26.0" prefWidth="123.0" text="Add employee" />
+      <Button fx:id="addEmployee" layoutX="823.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#showAddEmployeeDialog" prefHeight="26.0" prefWidth="123.0" text="Add employee" />
       <Button layoutX="378.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#onSearchByName" prefHeight="26.0" prefWidth="123.0" text="Retrieve by name" />
       <Button layoutX="516.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#onSearchByDepartment" prefHeight="26.0" prefWidth="150.0" text="Retrieve by department" />
       <TextField fx:id="ratingAmount" layoutX="56.0" layoutY="124.0" prefHeight="26.0" prefWidth="72.0" promptText="Rating" />
@@ -69,5 +69,6 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
+      <Button fx:id="clearFilters" layoutX="796.0" layoutY="195.0" mnemonicParsing="false" onMouseClicked="#loadEmployees" prefHeight="26.0" prefWidth="150.0" text="Clear filters" />
    </children>
 </AnchorPane>

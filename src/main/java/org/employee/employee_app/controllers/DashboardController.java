@@ -1,4 +1,4 @@
-package org.employee.employee_app;
+package org.employee.employee_app.controllers;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -12,8 +12,13 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import javafx.scene.layout.GridPane;
+import org.employee.employee_app.validators.UserInputValidation;
+import org.employee.employee_app.models.Employee;
+import org.employee.employee_app.models.EmployeeDB;
+import org.employee.employee_app.models.EmployeeID;
 
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -69,8 +74,6 @@ public class DashboardController {
     @FXML
     private TextField maxSalary;
 
-
-
     @FXML
     private TextField nameDepartmentSearch;
 
@@ -95,7 +98,7 @@ public class DashboardController {
         alert.showAndWait();
     }
 
-
+    @FXML
     protected void loadEmployees() {
         try {
             List<Employee<EmployeeID>> employees = employeeDB.getAllEmployees();
@@ -111,12 +114,10 @@ public class DashboardController {
     @FXML
     private void onGetEmployeesByRating(){
         try{
-            if (ratingGet.getText().isEmpty()) {
-                throw new IllegalArgumentException("Rating value cannot be empty.");
-            }
-            double rating = Double.parseDouble(ratingGet.getText().trim());
+            String ratingFiled = ratingGet.getText().trim();
+            UserInputValidation.validateInputField(ratingFiled, "Rating");
+            double rating = Double.parseDouble(ratingFiled);
             List<Employee<EmployeeID>> employees = employeeDB.getEmployeesByRating(rating);
-            System.out.println(employees);
             ObservableList<Employee<EmployeeID>> observableEmployees = FXCollections.observableArrayList(employees);
             tableView.setItems(observableEmployees);
         }catch (Exception e){
@@ -130,9 +131,7 @@ public class DashboardController {
     private void onCalculateDepAverageSalary(){
         try {
             String department = departmentName.getText();
-            if (department.isEmpty()) {
-                throw new IllegalArgumentException("Department name cannot be empty.");
-            }
+            UserInputValidation.validateInputField(department, "Department");
             double depAverage = employeeDB.getAverageSalaryByDepartment(department);
             deptAverage.setText(String.valueOf(depAverage));
         }catch (Exception e){
@@ -147,14 +146,11 @@ public class DashboardController {
         try {
             String max = maxSalary.getText().trim();
             String min = minSalary.getText().trim();
+            UserInputValidation.validateInputField(min, "Minimum salary");
+            UserInputValidation.validateInputField(max, "Maximum salary");
             double minimumSalary = Double.parseDouble(min);
             double maximumSalary = Double.parseDouble(max);
-            if (min.isEmpty()) {
-                throw new IllegalArgumentException("Minimum value cannot be empty.");
-            }
-            if (max.isEmpty()) {
-                throw new IllegalArgumentException("Maximum value cannot be empty.");
-            }
+            UserInputValidation.validateGetEmployeeSalaryInRangeInput(minimumSalary, maximumSalary);
             List<Employee<EmployeeID>> employee = employeeDB.getEmployeesInSalaryRange(minimumSalary,maximumSalary);
             ObservableList<Employee<EmployeeID>> observableEmployee = FXCollections.observableArrayList(employee);
             tableView.setItems(observableEmployee);
@@ -169,14 +165,11 @@ public class DashboardController {
         try{
             String ratingInput = ratingAmount.getText();
             String percentInput = percentageValue.getText();
-            if (ratingInput.isEmpty()) {
-                throw new IllegalArgumentException("Rating value cannot be empty.");
-            }
-            if (percentInput.isEmpty()) {
-                throw new IllegalArgumentException("Percentage value cannot be empty.");
-            }
+            UserInputValidation.validateInputField(ratingInput, "Performance rating");
+            UserInputValidation.validateInputField(percentInput, "Percentage");
             double rating = Double.parseDouble(ratingInput);
             double percentage = Double.parseDouble(percentInput);
+            UserInputValidation.validateRaiseByPercentInput(rating, percentage);
             employeeDB.salaryRaiseByRatePercent(rating, percentage);
             loadEmployees();
             tableView.refresh();
@@ -191,9 +184,7 @@ public class DashboardController {
     private void onSearchByName(){
         try {
             String name = nameDepartmentSearch.getText().trim();
-            if (name.isEmpty()) {
-                throw new IllegalArgumentException("Employee name cannot be empty.");
-            }
+            UserInputValidation.validateInputField(name, "Name");
             List<Employee<EmployeeID>> employee = employeeDB.getEmployeesByName(name);
             ObservableList<Employee<EmployeeID>> observableEmployee = FXCollections.observableArrayList(employee);
             tableView.setItems(observableEmployee);
@@ -206,9 +197,7 @@ public class DashboardController {
     private void onSearchByDepartment(){
         try{
             String department = nameDepartmentSearch.getText().trim();
-            if (department.isEmpty()) {
-                throw new IllegalArgumentException("Department name cannot be empty.");
-            }
+            UserInputValidation.validateInputField(department, "Department");
             List<Employee<EmployeeID>> employee = employeeDB.getEmployeesByDepartment(department);
             ObservableList<Employee<EmployeeID>> observableEmployee = FXCollections.observableArrayList(employee);
             tableView.setItems(observableEmployee);
@@ -268,17 +257,27 @@ public class DashboardController {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == addButtonType) {
                 try {
-                    return new Employee<>(
-                            new EmployeeID(),
-                            nameField.getText(),
-                            departmentField.getText(),
-                            Double.parseDouble(salaryField.getText()),
-                            Double.parseDouble(ratingField.getText()),
-                            Integer.parseInt(experienceField.getText()),
-                            activeCheckBox.isSelected()
-                    );
+                    String name = nameField.getText();
+                    String department = departmentField.getText();
+                    String Salary = salaryField.getText();
+                    String PerformanceRating = ratingField.getText();
+                    String YearsOfExperience = experienceField.getText();
+                    boolean isActive = activeCheckBox.isSelected();
+
+
+                    UserInputValidation.validateInputField(Salary, "Salary");
+                    UserInputValidation.validateInputField(PerformanceRating, "Performance");
+                    UserInputValidation.validateInputField(YearsOfExperience, "Years of experience");
+
+                    double salary = Double.parseDouble(Salary);
+                    double performanceRating = Double.parseDouble(PerformanceRating);
+                    int yearsOfExperience = Integer.parseInt(YearsOfExperience);
+
+                    UserInputValidation.validateCreateUserInput(new EmployeeID(),name,department,salary,performanceRating,yearsOfExperience);
+
+                    return new Employee<>(new EmployeeID(), name, department, salary, performanceRating, yearsOfExperience, isActive);
                 } catch (Exception e) {
-                    showAlert("Input Error", "Please enter valid data.");
+                    showAlert("An error occurred", e.getMessage());
                 }
             }
             return null;
@@ -370,62 +369,59 @@ public class DashboardController {
 
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == updateButtonType) {
-                    String newName = nameField.getText();
-                    String newDepartment = departmentField.getText();
-                    double newSalary = Double.parseDouble(salaryField.getText());
-                    double newPerformanceRating = Double.parseDouble(performanceField.getText());
-                    int newYearsOfExperience = Integer.parseInt(experienceField.getText());
-                    boolean newIsActive = activeCheckBox.isSelected();
+                    try {
 
-                    if (!newName.equals(originalName)) {
-                        employee.setName(newName);
-                        try {
-                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "name", newName);
-                        } catch (Exception e) {
-                            showAlert("Invalid update data", e.getMessage());
+
+                        String newName = nameField.getText();
+                        String newDepartment = departmentField.getText();
+                        String Salary = salaryField.getText();
+                        String PerformanceRating = performanceField.getText();
+                        String YearsOfExperience = experienceField.getText();
+                        boolean newIsActive = activeCheckBox.isSelected();
+
+                        UserInputValidation.validateInputField(newName, "Name");
+                        UserInputValidation.validateInputField(newDepartment, "Department");
+                        UserInputValidation.validateInputField(Salary, "Salary");
+                        UserInputValidation.validateInputField(PerformanceRating, "Performance");
+                        UserInputValidation.validateInputField(YearsOfExperience, "Years of experience");
+
+                        double newSalary = Double.parseDouble(Salary);
+                        double newPerformanceRating = Double.parseDouble(PerformanceRating);
+                        int newYearsOfExperience = Integer.parseInt(YearsOfExperience);
+
+
+                        if (!newName.equals(originalName)) {
+                                employee.setName(newName);
+                                employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "name", newName);
                         }
-                    }
-                    if (!newDepartment.equals(originalDepartment)) {
-                        employee.setDepartment(newDepartment);
-                        try {
-                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "department", newDepartment);
-                        } catch (Exception e) {
-                            showAlert("Invalid update data", e.getMessage());
+                        if (!newDepartment.equals(originalDepartment)) {
+                                employee.setDepartment(newDepartment);
+                                employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "department", newDepartment);
                         }
-                    }
-                    if (newSalary != originalSalary) {
-                        employee.setSalary(newSalary);
-                        try {
-                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "salary", newSalary);
-                        } catch (Exception e) {
-                            showAlert("Invalid update data", e.getMessage());
+                        if (newSalary != originalSalary) {
+                                UserInputValidation.validateForZeroValues(newSalary, "Salary");
+                                employee.setSalary(newSalary);
+                                employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "salary", newSalary);
                         }
-                    }
-                    if (newPerformanceRating != originalPerformanceRating) {
-                        employee.setPerformanceRating(newPerformanceRating);
-                        try {
-                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "performance", newPerformanceRating);
-                        } catch (Exception e) {
-                            showAlert("Invalid update data", e.getMessage());
+                        if (newPerformanceRating != originalPerformanceRating) {
+                                UserInputValidation.validateForZeroValues(newPerformanceRating, "Performance rating");
+                                employee.setPerformanceRating(newPerformanceRating);
+                                employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "performance", newPerformanceRating);
                         }
-                    }
-                    if (newYearsOfExperience != originalYearsOfExperience) {
-                        employee.setYearsOfExperience(newYearsOfExperience);
-                        try {
-                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "experience", newYearsOfExperience);
-                        } catch (Exception e) {
-                            showAlert("Invalid update data", e.getMessage());
+                        if (newYearsOfExperience != originalYearsOfExperience) {
+                                UserInputValidation.validateForZeroValues(newYearsOfExperience, "Years of experience");
+                                employee.setYearsOfExperience(newYearsOfExperience);
+                                employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "experience", newYearsOfExperience);
                         }
-                    }
-                    if (newIsActive != originalIsActive) {
-                        employee.setActive(newIsActive);
-                        try {
-                            employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "active", newIsActive);
-                        } catch (Exception e) {
-                            showAlert("Invalid update data", e.getMessage());
+                        if (newIsActive != originalIsActive) {
+                                employee.setActive(newIsActive);
+                                employeeDB.updateEmployeeDetails(employee.getEmployeeId(), "active", newIsActive);
                         }
+                        return employee;
+                    }catch (Exception e){
+                        showAlert("Invalid update data", e.getMessage());
+
                     }
-                    return employee;
                 }
                 return null;
             });
@@ -444,7 +440,7 @@ public class DashboardController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            employeeDB.removeEmployee((EmployeeID) employee.employeeId);
+            employeeDB.removeEmployee((EmployeeID) employee.getEmployeeId());
             loadEmployees();
         }
     }
@@ -485,7 +481,6 @@ public class DashboardController {
                 tableView.setItems(observableTopFive);
             } else if (selected.equals("Performance rating")) {
                 List<Employee<EmployeeID>> employees = employeeDB.sortEmployeesByRating();
-                System.out.println(employees);
                 ObservableList<Employee<EmployeeID>> observableEmployees = FXCollections.observableArrayList(employees);
                 tableView.setItems(observableEmployees);
                 tableView.refresh();
@@ -498,8 +493,6 @@ public class DashboardController {
             }
         });
     }
-
-
 
 
 }

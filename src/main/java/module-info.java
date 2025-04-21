@@ -8,4 +8,10 @@ module org.employee.employee_app {
 
     opens org.employee.employee_app to javafx.fxml;
     exports org.employee.employee_app;
+    exports org.employee.employee_app.models;
+    opens org.employee.employee_app.models to javafx.fxml;
+    exports org.employee.employee_app.controllers;
+    opens org.employee.employee_app.controllers to javafx.fxml;
+    exports org.employee.employee_app.validators;
+    opens org.employee.employee_app.validators to javafx.fxml;
 }

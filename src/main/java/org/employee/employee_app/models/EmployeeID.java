@@ -1,4 +1,4 @@
-package org.employee.employee_app;
+package org.employee.employee_app.models;
 
 import java.util.Random;
 
