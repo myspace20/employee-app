@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class EmployeeTest {
@@ -43,6 +43,12 @@ public class EmployeeTest {
         Employee<EmployeeID> employee1 = new Employee<>(employeeID1,"Roger",department,2000,4,3,true);
         Employee<EmployeeID> employee2 = new Employee<>(employeeID2,"Roger",department,2000,4,3,true);
         Employee<EmployeeID> employee3 = new Employee<>(employeeID3,"Roger",department,2000,4,3,true);
+
+        assertNotNull(employee1);
+        assertNotNull(employee2);
+        assertNotNull(employee3);
+
+
         employeeDatabase.addEmployee(employee1);
         employeeDatabase.addEmployee(employee2);
         employeeDatabase.addEmployee(employee3);
@@ -53,6 +59,29 @@ public class EmployeeTest {
             assertEquals(department, employee.getDepartment());
         }
 
+    }
+
+    @Test
+    public void deleteEmployeeAndVerify() throws EmployeeNotFound{
+        String department = "IT";
+        EmployeeID employeeID1 = new EmployeeID();
+        Employee<EmployeeID> employee1 = new Employee<>(employeeID1,"Roger",department,2000,4,3,true);
+        assertNotNull(employee1);
+        employeeDatabase.addEmployee(employee1);
+
+        Optional<Employee<EmployeeID>> retrievedEmployeee = employeeDatabase.retrieveEmployeeById(employeeID1);
+
+        assertTrue(retrievedEmployeee.isPresent());
+
+        employeeDatabase.removeEmployee(employeeID1);
+
+
+        EmployeeNotFound thrown = assertThrows(
+                EmployeeNotFound.class,
+                () -> employeeDatabase.retrieveEmployeeById(employeeID1)
+        );
+
+        assertTrue(thrown.getMessage().contains("Employee not found"));
 
 
     }
