@@ -1,17 +1,30 @@
 package org.employee.employee_app.models;
 
+import org.employee.employee_app.exceptions.EmployeeNotFound;
 import org.employee.employee_app.exceptions.FailedUpdateOperation;
+import org.employee.employee_app.exceptions.InvalidDepartment;
 import org.employee.employee_app.exceptions.InvalidUserInput;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EmployeeDB<T, E> {
+import static org.employee.employee_app.models.Employee.EmployeePerformanceComparator;
+
+public class EmployeeDB<T> {
 
     private final Map<T, Employee<T>> employeeDB = new HashMap<>();
 
     public void addEmployee(Employee<T> e){
         employeeDB.put(e.employeeId, e);
+    }
+
+    public Optional<Employee<T>> retrieveEmployeeById(T id) throws EmployeeNotFound{
+        Optional<Employee<T>> employee = employeeDB.values().stream()
+                .filter(emp ->emp.employeeId == id).findFirst();
+        if(employee.isEmpty()){
+            throw new EmployeeNotFound("Employee not found");
+        }
+        return employee;
     }
 
 
@@ -24,10 +37,10 @@ public class EmployeeDB<T, E> {
         employeeDB.remove(employeeId);
     }
 
-    public void updateEmployeeDetails(T employeeId, String field, Object newValue) throws Exception {
+    public void updateEmployeeDetails(T employeeId, String field, Object newValue) throws EmployeeNotFound,FailedUpdateOperation {
         Employee<T> currentEmployee = employeeDB.get(employeeId);
         if (currentEmployee == null) {
-            throw new FailedUpdateOperation("Employee does not exist");
+            throw new EmployeeNotFound("Employee does not exist");
         }
         Employee<T> updatedEmployee = getTEmployee(field, newValue, currentEmployee);
 
@@ -63,16 +76,24 @@ public class EmployeeDB<T, E> {
     }
 
 
-    public List<Employee<T>> getEmployeesByDepartment(String department){
-       return employeeDB.values().stream()
+    public List<Employee<T>> getEmployeesByDepartment(String department) throws InvalidDepartment {
+        List<Employee<T>> employees =  employeeDB.values().stream()
                 .filter(emp -> emp.getDepartment().equals(department))
                 .toList();
+        if(employees.isEmpty()){
+            throw new InvalidDepartment("The department provided is invalid");
+        }
+        return employees;
     }
 
-    public List<Employee<T>> getEmployeesByName(String name){
-        return employeeDB.values().stream()
+    public List<Employee<T>> getEmployeesByName(String name) throws EmployeeNotFound {
+        List<Employee<T>> employee =  employeeDB.values().stream()
                 .filter(emp -> emp.getName().equals(name))
                 .toList();
+        if(employee.isEmpty()){
+            throw new EmployeeNotFound("The employee from that search term not found");
+        }
+        return employee;
     }
 
 
@@ -102,14 +123,13 @@ public class EmployeeDB<T, E> {
 
 
     public List<Employee<T>> sortEmployeesByRating(){
-        return employeeDB.values().stream().sorted(Employee.EmployeePerformanceComparator).toList();
+        return employeeDB.values().stream().sorted(EmployeePerformanceComparator).toList();
     }
 
 
     public List<Employee<T>> sortEmployeesSalaryHighestFirst(){
         return employeeDB.values().stream().sorted(Employee.EmployeeSalaryComparator).toList();
     }
-
 
 
     public double getAverageSalaryByDepartment(String department) {
