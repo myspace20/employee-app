@@ -273,7 +273,7 @@ public class DashboardController {
                     double performanceRating = Double.parseDouble(PerformanceRating);
                     int yearsOfExperience = Integer.parseInt(YearsOfExperience);
 
-                    UserInputValidation.validateCreateUserInput(new EmployeeID(),name,department,salary,performanceRating,yearsOfExperience);
+                    UserInputValidation.validateCreateUserInput(new EmployeeID(), name, department, salary, performanceRating, yearsOfExperience);
 
                     return new Employee<>(new EmployeeID(), name, department, salary, performanceRating, yearsOfExperience, isActive);
                 } catch (Exception e) {
