@@ -97,17 +97,17 @@ public class EmployeeDB<T, E> {
 
     public List<Employee<T>> getTopFiveHighestPaidEmployees(){
 
-        return employeeDB.values().stream().sorted(Employee.EmployeeSalaryComparator).limit(5).toList();
+        return employeeDB.values().stream().sorted(Comparator.nullsLast(Employee.EmployeeSalaryComparator)).limit(5).toList();
     }
 
 
     public List<Employee<T>> sortEmployeesByRating(){
-        return employeeDB.values().stream().sorted(Employee.EmployeePerformanceComparator).toList();
+        return employeeDB.values().stream().sorted(Comparator.nullsLast(Employee.EmployeePerformanceComparator)).toList();
     }
 
 
     public List<Employee<T>> sortEmployeesSalaryHighestFirst(){
-        return employeeDB.values().stream().sorted(Employee.EmployeeSalaryComparator).toList();
+        return employeeDB.values().stream().sorted(Comparator.nullsLast(Employee.EmployeeSalaryComparator)).toList();
     }
 
 
