@@ -21,8 +21,12 @@ import org.employee.employee_app.models.EmployeeID;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class DashboardController {
+
+    private static final Logger logger = Logger.getLogger(DashboardController.class.getName());
+
 
     @FXML
     public Button addEmployee;
@@ -85,7 +89,8 @@ public class DashboardController {
     @FXML
     private TextField ratingGet;
 
-    private final EmployeeDB<EmployeeID,Employee<EmployeeID>> employeeDB = new EmployeeDB<>();
+
+    private final EmployeeDB<EmployeeID> employeeDB = new EmployeeDB<>();
 
 
 
@@ -106,7 +111,8 @@ public class DashboardController {
             sortedEmployees.setComparator(Comparator.naturalOrder());
             tableView.setItems(sortedEmployees);
         } catch (Exception e) {
-        showAlert("Failed to load employees", e.getMessage());        }
+        showAlert("Failed to load employees", e.getMessage());
+        }
     }
 
 
@@ -135,6 +141,7 @@ public class DashboardController {
             deptAverage.setText(String.valueOf(depAverage));
         }catch (Exception e){
             showAlert("An error occured", e.getMessage());
+            logger.severe(e.getMessage());
         }
 
     }
@@ -155,6 +162,7 @@ public class DashboardController {
             tableView.setItems(observableEmployee);
         }catch (Exception e){
             showAlert("An error occured", e.getMessage());
+            logger.severe(e.getMessage());
         }
     }
 
@@ -174,6 +182,7 @@ public class DashboardController {
             tableView.refresh();
         }catch (Exception e){
             showAlert("An error occured", e.getMessage());
+            logger.severe(e.getMessage());
         }
 
     }
@@ -189,6 +198,7 @@ public class DashboardController {
             tableView.setItems(observableEmployee);
         }catch (Exception e) {
             showAlert("An error occured", e.getMessage());
+            logger.severe(e.getMessage());
         }
     }
 
@@ -202,6 +212,7 @@ public class DashboardController {
             tableView.setItems(observableEmployee);
         }catch (Exception e){
             showAlert("An error occured", e.getMessage());
+            logger.severe(e.getMessage());
         }
 
     }
@@ -263,7 +274,6 @@ public class DashboardController {
                     String YearsOfExperience = experienceField.getText();
                     boolean isActive = activeCheckBox.isSelected();
 
-
                     UserInputValidation.validateInputField(Salary, "Salary");
                     UserInputValidation.validateInputField(PerformanceRating, "Performance");
                     UserInputValidation.validateInputField(YearsOfExperience, "Years of experience");
@@ -272,11 +282,12 @@ public class DashboardController {
                     double performanceRating = Double.parseDouble(PerformanceRating);
                     int yearsOfExperience = Integer.parseInt(YearsOfExperience);
 
-                    UserInputValidation.validateCreateUserInput(new EmployeeID(),name,department,salary,performanceRating,yearsOfExperience);
+                    UserInputValidation.validateCreateUserInput(new EmployeeID(), name, department, salary, performanceRating, yearsOfExperience);
 
                     return new Employee<>(new EmployeeID(), name, department, salary, performanceRating, yearsOfExperience, isActive);
                 } catch (Exception e) {
                     showAlert("An error occurred", e.getMessage());
+                    logger.severe(e.getMessage());
                 }
             }
             return null;
@@ -370,7 +381,6 @@ public class DashboardController {
                 if (dialogButton == updateButtonType) {
                     try {
 
-
                         String newName = nameField.getText();
                         String newDepartment = departmentField.getText();
                         String Salary = salaryField.getText();
@@ -419,7 +429,7 @@ public class DashboardController {
                         return employee;
                     }catch (Exception e){
                         showAlert("Invalid update data", e.getMessage());
-
+                        logger.severe(e.getMessage());
                     }
                 }
                 return null;

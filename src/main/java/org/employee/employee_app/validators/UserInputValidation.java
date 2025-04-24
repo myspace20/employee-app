@@ -1,29 +1,34 @@
 package org.employee.employee_app.validators;
 
+import org.employee.employee_app.exceptions.InvalidSalary;
 import org.employee.employee_app.exceptions.InvalidUserInput;
+
+import java.util.logging.Logger;
 
 public class UserInputValidation {
 
-    public static <T> void validateCreateUserInput(T employeeId, String name, String department, double salary, double performanceRating, int yearsOfExperience){
+
+    public static <T> void validateCreateUserInput(T employeeId, String name, String department, double salary, double performanceRating, int yearsOfExperience) throws InvalidSalary {
       validateInputField(name,"Name");
 
       validateInputField(department, "Department");
 
-      UserInputValidation.validateForZeroValues(salary, "Salary");
+      UserInputValidation.validDateSalary(salary, "Salary");
       UserInputValidation.validateForZeroValues(performanceRating, "Performance rating");
       UserInputValidation.validateForZeroValues(yearsOfExperience, "Years of experience");
 
     }
 
-
-    public static  void validateGetEmployeeSalaryInRangeInput(Double min, Double max){
-        if (isNullOrNegativeOrZero(min)){
-            throw new InvalidUserInput("Minimum must greater than 0");
+    public static void validDateSalary(Double salary, String field) throws  InvalidSalary{
+        if (isNullOrNegativeOrZero(salary)){
+            throw new InvalidSalary("Invalid salary value for, " + field + "please try again");
         }
+    }
 
-        if (isNullOrNegativeOrZero(max)){
-            throw new InvalidUserInput("Maximum must greater than 0");
-        }
+
+    public static  void validateGetEmployeeSalaryInRangeInput(Double min, Double max) throws InvalidSalary {
+      validDateSalary(min, "Minimum salary");
+      validDateSalary(max, "Maximum salary");
     }
 
     public static void validateRaiseByPercentInput(Double rating, Double percent){
@@ -39,6 +44,7 @@ public class UserInputValidation {
         if(isEmptyOrNullString(value)){
             throw new InvalidUserInput(field + " must not be empty");
         }
+
     }
 
     public static  void validateForZeroValues(Double value, String field){
